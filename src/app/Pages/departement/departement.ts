@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { DepartementModel } from '../../Models/DepartementModel';
 import { DepartementService } from '../../Services/departement-service';
 
@@ -8,24 +8,35 @@ import { DepartementService } from '../../Services/departement-service';
   templateUrl: './departement.html',
   styleUrl: './departement.scss',
 })
-export class Departement implements OnInit{
-  departements:DepartementModel[]=[];
-  
-  constructor(private departementService: DepartementService) {
-  }
+export class Departement implements OnInit {
+  departements: DepartementModel[] = [];
+  isLoading = true; // ← ajoute un état de chargement
 
+  constructor(
+  private departementService: DepartementService,
+  private cdr: ChangeDetectorRef
+) {
+  console.log('API URL:', this.departementService['apiUrl']); // ← ajoute ça
+}
 
   ngOnInit(): void {
+    this.getAllDepartments();
+  }
 
-this.getAllDepartments();  
-}
-
-getAllDepartments(){
-  this.departementService.getDepartements().subscribe((data) => {
-    this.departements = data;
-    
+  
+getAllDepartments() {
+  this.departementService.getDepartements().subscribe({
+    next: (data) => {
+      this.departements = [...data];
+      this.isLoading = false;
+      this.cdr.detectChanges(); // ← nécessaire dans ton cas
+    },
+    error: (err) => {
+      console.error('ERREUR HTTP:', err);
+      this.isLoading = false;
+      this.cdr.detectChanges();
+    }
   });
-
-}
+}  
 
 }
