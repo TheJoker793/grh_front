@@ -1,0 +1,23 @@
+<table class="table" *ngIf="departements && departements.length > 0; else emptyState">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Département</th>
+      <th scope="col">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr *ngFor="let dep of departements; let i = index">
+      <th scope="row">{{ i + 1 }}</th>
+      <td>{{ dep.libelle }}</td>
+      <td>{{ dep.description }}</td>
+    </tr>
+  </tbody>
+</table>
+
+<ng-template #emptyState>
+  <div class="alert alert-info mt-3">
+    Aucun département disponible.
+  </div>
+</ng-template>
