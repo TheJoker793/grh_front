@@ -16,7 +16,6 @@ export class Departement implements OnInit {
   private departementService: DepartementService,
   private cdr: ChangeDetectorRef
 ) {
-  console.log('API URL:', this.departementService['apiUrl']); // ← ajoute ça
 }
 
   ngOnInit(): void {
@@ -31,8 +30,7 @@ getAllDepartments() {
       this.isLoading = false;
       this.cdr.detectChanges(); // ← nécessaire dans ton cas
     },
-    error: (err) => {
-      console.error('ERREUR HTTP:', err);
+    error: () => {
       this.isLoading = false;
       this.cdr.detectChanges();
     }
